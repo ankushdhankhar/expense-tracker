@@ -25,7 +25,7 @@ const Navbar = () => {
   }
   return (
     <div className='border-b border-gray-300 '>
-        <div className='flex items-center justify-between max-w-7xl mx-auto'>
+         <div className='flex items-center justify-between max-w-7xl mx-auto h-16'>
             <Logo/>
             {
               user ? (
