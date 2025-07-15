@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogClose,
@@ -22,23 +22,31 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Pencil } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setExpenses } from "@/redux/expenseSlice";
+import { setExpenses, setSingleExpense } from "@/redux/expenseSlice";
 
-const CreateExpense = () => {
+const UpdateExpense = ({expense}) => {
+  const { expenses, singleExpense } = useSelector((store) => store.expense);
   const [formData, setFormData] = useState({
-    description: "",
-    amount: "",
-    category: "",
+    description: singleExpense?.description,
+    amount: singleExpense?.amount,
+    category: singleExpense?.category,
   });
 
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const {expenses} = useSelector((store) => store.expense);
+
+  useEffect(() => {
+    setFormData({
+      description: singleExpense?.description,
+      amount: singleExpense?.amount,
+      category: singleExpense?.category,
+    });
+  }, [singleExpense]);
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -61,8 +69,8 @@ const CreateExpense = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/expense/add",
+      const res = await axios.put(
+        `http://localhost:8000/api/v1/expense/update/${expense._id}`,
         formData,
         {
           headers: {
@@ -73,7 +81,8 @@ const CreateExpense = () => {
       );
 
       if (res.data.success) {
-        dispatch(setExpenses([...expenses, res.data.expense]));
+        const updatedExpenses=expenses.map(exp=>exp._id===expense._id ? res.data.expense : exp);
+        dispatch(setExpenses(updatedExpenses));
         toast.success(res.data.message);
         setIsOpen(false);
       }
@@ -86,15 +95,22 @@ const CreateExpense = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} variant="outline">
-          Create New Expense
+        <Button
+          onClick={() => {
+            dispatch(setSingleExpense(expense))
+            setIsOpen(false);
+          }}
+          className="group p-2 rounded-full bg-gray-100 hover:bg-blue-100 transition-all duration-200 ease-in-out"
+          variant="outline"
+        >
+          <Pencil className="h-4 w-4 stroke-blue-600 fill-transparent group-hover:fill-blue-600 group-hover:scale-110 transition-all duration-200" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add expense</DialogTitle>
+          <DialogTitle>Update expense</DialogTitle>
           <DialogDescription>
-            Add expense here, click add when done.
+            Update expense here, click update when done.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submitHandler}>
@@ -119,7 +135,7 @@ const CreateExpense = () => {
                 onChange={changeEventHandler}
               />
             </div>
-            <Select onValueChange={changeCategoryHandler}>
+            <Select value={formData.category} onValueChange={changeCategoryHandler}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -145,7 +161,7 @@ const CreateExpense = () => {
                 please wait
               </Button>
             ) : (
-              <Button type="submit">Add</Button>
+              <Button type="submit">Update</Button>
             )}
           </DialogFooter>
         </form>
@@ -154,4 +170,4 @@ const CreateExpense = () => {
   );
 };
 
-export default CreateExpense;
+export default UpdateExpense;

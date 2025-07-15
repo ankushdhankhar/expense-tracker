@@ -10,10 +10,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useDispatch } from "react-redux";
+import { setCategory, setMarkAsDone } from "@/redux/expenseSlice";
+import ExpenseTable from "./ExpenseTable";
+import useGetExpenses from "@/hooks/useGetExpenses";
 
 const Home = () => {
-  const changeCategoryHandler = (value) => {};
-  const changeDoneHandler = (value) => {};
+  useGetExpenses();
+  const dispatch = useDispatch();
+  const changeCategoryHandler = (value) => {
+    dispatch(setCategory(value));
+  };
+  const changeDoneHandler = (value) => {
+    dispatch(setMarkAsDone(value));
+  };
   return (
     <div>
       <Navbar />
@@ -52,6 +62,7 @@ const Home = () => {
             </SelectContent>
           </Select>
         </div>
+        <ExpenseTable/>
       </div>
     </div>
   );

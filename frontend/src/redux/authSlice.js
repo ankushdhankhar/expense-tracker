@@ -24,4 +24,4 @@ export const {
     setAuthUser
 } = authSlice.actions ;
 
-export default authSlice ;
+export default authSlice.reducer ;
