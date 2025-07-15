@@ -38,7 +38,7 @@ const CreateExpense = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const {expenses} = useSelector((store) => store.expense);
+  const { expenses } = useSelector((store) => store.expense);
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -62,7 +62,7 @@ const CreateExpense = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/expense/add",
+        "https://expense-tracker-backend-xhfv.onrender.com/api/v1/expense/add",
         formData,
         {
           headers: {

@@ -1,5 +1,5 @@
 import './App.css'
-import Home from './components/home'
+import Home from './components/Home'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'

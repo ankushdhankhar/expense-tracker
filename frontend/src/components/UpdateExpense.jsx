@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setExpenses, setSingleExpense } from "@/redux/expenseSlice";
 
-const UpdateExpense = ({expense}) => {
+const UpdateExpense = ({ expense }) => {
   const { expenses, singleExpense } = useSelector((store) => store.expense);
   const [formData, setFormData] = useState({
     description: singleExpense?.description,
@@ -70,7 +70,7 @@ const UpdateExpense = ({expense}) => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `http://localhost:8000/api/v1/expense/update/${expense._id}`,
+        `https://expense-tracker-backend-xhfv.onrender.com/api/v1/expense/update/${expense._id}`,
         formData,
         {
           headers: {
@@ -81,7 +81,9 @@ const UpdateExpense = ({expense}) => {
       );
 
       if (res.data.success) {
-        const updatedExpenses=expenses.map(exp=>exp._id===expense._id ? res.data.expense : exp);
+        const updatedExpenses = expenses.map((exp) =>
+          exp._id === expense._id ? res.data.expense : exp
+        );
         dispatch(setExpenses(updatedExpenses));
         toast.success(res.data.message);
         setIsOpen(false);
@@ -97,7 +99,7 @@ const UpdateExpense = ({expense}) => {
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            dispatch(setSingleExpense(expense))
+            dispatch(setSingleExpense(expense));
             setIsOpen(false);
           }}
           className="group p-2 rounded-full bg-gray-100 hover:bg-blue-100 transition-all duration-200 ease-in-out"
@@ -135,7 +137,10 @@ const UpdateExpense = ({expense}) => {
                 onChange={changeEventHandler}
               />
             </div>
-            <Select value={formData.category} onValueChange={changeCategoryHandler}>
+            <Select
+              value={formData.category}
+              onValueChange={changeCategoryHandler}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>

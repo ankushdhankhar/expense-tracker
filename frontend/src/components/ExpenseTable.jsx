@@ -41,7 +41,7 @@ const ExpenseTable = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/v1/expense/${expenseId}/done`,
+        `https://expense-tracker-backend-xhfv.onrender.com/api/v1/expense/${expenseId}/done`,
         { done: newStatus },
         {
           headers: {
@@ -73,7 +73,7 @@ const ExpenseTable = () => {
   const removeExpenseHandler = async (expenseId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/expense/remove/${expenseId}`
+        `https://expense-tracker-backend-xhfv.onrender.com/api/v1/expense/remove/${expenseId}`
       );
       if (res.data.success) {
         toast.success(res.data.message);
@@ -113,19 +113,27 @@ const ExpenseTable = () => {
                   onCheckedChange={() => handleCheckboxChange(expense._id)}
                 />
               </TableCell>
-              <TableCell className={`${expense.done ? 'line-through' : ''}`}>{expense.description}</TableCell>
-              <TableCell className={`${expense.done ? 'line-through' : ''}`}>{expense.amount}</TableCell>
-              <TableCell className={`${expense.done ? 'line-through' : ''}`}>{expense.category}</TableCell>
-              <TableCell className={`${expense.done ? 'line-through' : ''}`}>{expense.createdAt?.split("T")[0]}</TableCell>
+              <TableCell className={`${expense.done ? "line-through" : ""}`}>
+                {expense.description}
+              </TableCell>
+              <TableCell className={`${expense.done ? "line-through" : ""}`}>
+                {expense.amount}
+              </TableCell>
+              <TableCell className={`${expense.done ? "line-through" : ""}`}>
+                {expense.category}
+              </TableCell>
+              <TableCell className={`${expense.done ? "line-through" : ""}`}>
+                {expense.createdAt?.split("T")[0]}
+              </TableCell>
               <TableCell className="text-right">
-                <div className="flex items-center justify-end gap-2 "> 
+                <div className="flex items-center justify-end gap-2 ">
                   <button
-    onClick={() => removeExpenseHandler(expense._id)}
-    className="group p-2 rounded-full bg-gray-100 hover:bg-red-100 transition-all duration-200 ease-in-out"
-  >
-    <Trash className="h-4 w-4 stroke-red-600 fill-transparent group-hover:fill-red-600 group-hover:scale-110 transition-all duration-200" />
-  </button>
-                  <UpdateExpense expense={expense}/>
+                    onClick={() => removeExpenseHandler(expense._id)}
+                    className="group p-2 rounded-full bg-gray-100 hover:bg-red-100 transition-all duration-200 ease-in-out"
+                  >
+                    <Trash className="h-4 w-4 stroke-red-600 fill-transparent group-hover:fill-red-600 group-hover:scale-110 transition-all duration-200" />
+                  </button>
+                  <UpdateExpense expense={expense} />
                 </div>
               </TableCell>
             </TableRow>
