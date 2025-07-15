@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import Logo from "./shared/logo";
+import Logo from "./shared/Logo";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
